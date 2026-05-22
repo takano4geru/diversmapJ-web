@@ -1,0 +1,2 @@
+# diversmapJ-web
+モックアプリのWEB版
