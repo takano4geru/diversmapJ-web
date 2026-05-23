@@ -1,0 +1,200 @@
+# アンケート質問定義ファイル
+# 質問の追加・変更・順序変更はこのファイルだけを編集する
+#
+# type    : single（単一選択） / multiple（複数選択）
+# layout  : list（テキスト+アイコン縦リスト） / grid（アイコン+名称グリッドカード）
+#
+# showIf / hideIf による条件分岐:
+#   showIf → 条件が満たされる場合のみ表示（デフォルト非表示）
+#   hideIf → 条件が満たされる場合はスキップ（デフォルト表示）
+#
+# icon には Material Icons の名前を文字列で指定する。
+# 使用可能なアイコン名は lib/data/survey_question_loader.dart の _iconMap を参照。
+
+questions:
+  # ──────────────────────────────────────────────
+  # 主な移動手段（グリッドレイアウト・複数選択）
+  # ──────────────────────────────────────────────
+  - id: transport
+    label: 主な移動手段
+    question: 主な移動手段は何ですか？
+    description: 複数選択できます
+    type: multiple
+    layout: grid
+    optionVisualSize: 24
+    optionContainerSize: 44
+    options:
+      - value: 徒歩
+        icon: directions_walk
+        color: "#1D9E75"
+      - value: 自転車
+        icon: directions_bike
+        color: "#378ADD"
+      - value: バス
+        icon: directions_bus
+        color: "#EF9F27"
+      - value: 電車
+        icon: train
+        color: "#0F6E56"
+      - value: 車
+        icon: directions_car
+        color: "#D85A30"
+      - value: 車椅子
+        icon: accessible
+        color: "#9C27B0"
+
+  # ──────────────────────────────────────────────
+  # 車の用途（transport で「車」選択時のみ表示）
+  # ──────────────────────────────────────────────
+  - id: car_usage
+    label: 車の用途
+    question: 車での移動はどのような目的ですか？
+    description: 複数選択できます
+    type: multiple
+    layout: list
+    showIf:
+      questionId: transport
+      containsAny:
+        - 車
+    options:
+      - value: 通勤・通学
+        icon: work_outline
+        color: "#1D9E75"
+      - value: 買い物・用事
+        icon: shopping_bag_outlined
+        color: "#D85A30"
+      - value: 長距離移動
+        icon: map_outlined
+        color: "#378ADD"
+      - value: レジャー・ドライブ
+        icon: landscape
+        color: "#EF9F27"
+
+  # ──────────────────────────────────────────────
+  # 移動の困りごと（リストレイアウト・複数選択）
+  # ──────────────────────────────────────────────
+  - id: difficulty
+    label: 移動の困りごと
+    question: 移動で困っていることは？
+    description: 複数選択できます
+    type: multiple
+    layout: list
+    options:
+      - value: 段差・階段が多い
+        icon: stairs
+        color: "#D85A30"
+      - value: 乗り換えが複雑
+        icon: route
+        color: "#EF9F27"
+      - value: 混雑が苦手
+        icon: people
+        color: "#378ADD"
+      - value: 情報が少ない
+        icon: info_outline
+        color: "#1D9E75"
+      - value: 特になし
+        icon: check_circle_outline
+        color: "#6B6B6B"
+
+  # ──────────────────────────────────────────────
+  # 主な移動エリア（グリッドレイアウト・単一選択・アセット画像サンプル）
+  # ──────────────────────────────────────────────
+  - id: area
+    label: 主な移動エリア
+    question: よく移動するエリアはどこですか？
+    type: single
+    layout: grid
+    optionVisualSize: 26
+    optionContainerSize: 48
+    options:
+      # imagePath を指定するとアセット画像を優先表示（ファイルがなければ icon にフォールバック）
+      - value: 市内中心部
+        icon: location_city
+        imagePath: assets/images/area_city.png
+        color: "#378ADD"
+      - value: 郊外・住宅地
+        icon: house
+        imagePath: assets/images/area_suburb.png
+        color: "#1D9E75"
+      - value: 観光地
+        icon: photo_camera
+        imagePath: assets/images/area_tourism.png
+        color: "#EF9F27"
+      - value: 職場・学校
+        icon: business_center
+        imagePath: assets/images/area_work.png
+        color: "#0F6E56"
+
+  # ──────────────────────────────────────────────
+  # 移動の目的（リストレイアウト・複数選択）
+  # ──────────────────────────────────────────────
+  - id: purpose
+    label: 移動の目的
+    question: 移動の主な目的は何ですか？
+    description: 複数選択できます
+    type: multiple
+    layout: list
+    options:
+      - value: 通勤・通学
+        icon: work_outline
+        color: "#1D9E75"
+      - value: 買い物
+        icon: shopping_bag_outlined
+        color: "#D85A30"
+      - value: 観光・レジャー
+        icon: beach_access
+        color: "#EF9F27"
+      - value: 医療・福祉施設
+        icon: local_hospital_outlined
+        color: "#378ADD"
+      - value: その他
+        icon: more_horiz
+        color: "#6B6B6B"
+
+  # ──────────────────────────────────────────────
+  # 外出頻度（リストレイアウト・単一選択）
+  # ──────────────────────────────────────────────
+  - id: frequency
+    label: 外出頻度
+    question: 外出する頻度はどのくらいですか？
+    type: single
+    layout: list
+    options:
+      - value: 毎日
+        icon: calendar_today
+      - value: 週3〜4回
+        icon: date_range
+      - value: 週1〜2回
+        icon: calendar_view_week
+      - value: 月数回
+        icon: calendar_month
+
+  # ──────────────────────────────────────────────
+  # 欲しい情報（difficulty で「特になし」選択時はスキップ）
+  # ──────────────────────────────────────────────
+  - id: info_need
+    label: 欲しい情報
+    question: どんな情報が役立ちますか？
+    description: 複数選択できます
+    type: multiple
+    layout: list
+    hideIf:
+      questionId: difficulty
+      containsAny:
+        - 特になし
+    options:
+      - value: バリアフリー経路
+        icon: accessible_forward
+        color: "#1D9E75"
+      - value: リアルタイム混雑
+        icon: people_alt_outlined
+        color: "#378ADD"
+      - value: 工事・通行止め
+        icon: warning_amber_outlined
+        color: "#EF9F27"
+      - value: 乗換・時刻表
+        icon: schedule
+        color: "#0F6E56"
+      - value: 周辺グルメ・観光
+        icon: restaurant
+        color: "#D85A30"
