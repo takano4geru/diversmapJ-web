@@ -8,193 +8,187 @@
 #   showIf → 条件が満たされる場合のみ表示（デフォルト非表示）
 #   hideIf → 条件が満たされる場合はスキップ（デフォルト表示）
 #
+# 【分岐フロー】
+#   movement_mode（常に表示）
+#     ├─ 自走式車椅子 / 電動車椅子
+#     │    → upper_body_full（Q3）
+#     │         ├─ いいえ → upper_body_partial（Q4）→ 確認画面
+#     │         └─ はい  → limited_upper_body_situation（別途準備）→ 確認画面
+#     ├─ 介助者 / ベビーカー / 2人乗りベビーカー / 小さいお子さん連れ / ペット連れ
+#     │    → non_disability_situation（別途準備）→ 確認画面
+#     ├─ 杖利用者 / シニアカー
+#     │    → ambulatory_situation（別途準備）→ 確認画面
+#     └─ その他 → 確認画面（追加質問なし）
+#
+# ※ YAML の記述順序 = 画面表示順序。showIf 条件が同じ質問は上から順に表示される。
+#
 # icon には Material Icons の名前を文字列で指定する。
 # 使用可能なアイコン名は lib/data/survey_question_loader.dart の _iconMap を参照。
 
 questions:
-  # ──────────────────────────────────────────────
-  # 主な移動手段（グリッドレイアウト・複数選択）
-  # ──────────────────────────────────────────────
-  - id: transport
-    label: 主な移動手段
-    question: 主な移動手段は何ですか？
-    description: 複数選択できます
-    type: multiple
-    layout: grid
-    optionVisualSize: 24
-    optionContainerSize: 44
-    options:
-      - value: 徒歩
-        icon: directions_walk
-        color: "#1D9E75"
-      - value: 自転車
-        icon: directions_bike
-        color: "#378ADD"
-      - value: バス
-        icon: directions_bus
-        color: "#EF9F27"
-      - value: 電車
-        icon: train
-        color: "#0F6E56"
-      - value: 車
-        icon: directions_car
-        color: "#D85A30"
-      - value: 車椅子
-        icon: accessible
-        color: "#9C27B0"
-
-  # ──────────────────────────────────────────────
-  # 車の用途（transport で「車」選択時のみ表示）
-  # ──────────────────────────────────────────────
-  - id: car_usage
-    label: 車の用途
-    question: 車での移動はどのような目的ですか？
-    description: 複数選択できます
-    type: multiple
-    layout: list
-    showIf:
-      questionId: transport
-      containsAny:
-        - 車
-    options:
-      - value: 通勤・通学
-        icon: work_outline
-        color: "#1D9E75"
-      - value: 買い物・用事
-        icon: shopping_bag_outlined
-        color: "#D85A30"
-      - value: 長距離移動
-        icon: map_outlined
-        color: "#378ADD"
-      - value: レジャー・ドライブ
-        icon: landscape
-        color: "#EF9F27"
-
-  # ──────────────────────────────────────────────
-  # 移動の困りごと（リストレイアウト・複数選択）
-  # ──────────────────────────────────────────────
-  - id: difficulty
-    label: 移動の困りごと
-    question: 移動で困っていることは？
-    description: 複数選択できます
-    type: multiple
-    layout: list
-    options:
-      - value: 段差・階段が多い
-        icon: stairs
-        color: "#D85A30"
-      - value: 乗り換えが複雑
-        icon: route
-        color: "#EF9F27"
-      - value: 混雑が苦手
-        icon: people
-        color: "#378ADD"
-      - value: 情報が少ない
-        icon: info_outline
-        color: "#1D9E75"
-      - value: 特になし
-        icon: check_circle_outline
-        color: "#6B6B6B"
-
-  # ──────────────────────────────────────────────
-  # 主な移動エリア（グリッドレイアウト・単一選択・アセット画像サンプル）
-  # ──────────────────────────────────────────────
-  - id: area
-    label: 主な移動エリア
-    question: よく移動するエリアはどこですか？
+  # ──────────────────────────────────────────────────────────────
+  # 移動のモード選択（常に表示・グリッド10択）
+  # ──────────────────────────────────────────────────────────────
+  - id: movement_mode
+    label: 移動のモード
+    question: 移動のモードを選択してください
     type: single
     layout: grid
-    optionVisualSize: 26
-    optionContainerSize: 48
+    optionVisualSize: 28
+    optionContainerSize: 52
     options:
-      # imagePath を指定するとアセット画像を優先表示（ファイルがなければ icon にフォールバック）
-      - value: 市内中心部
-        icon: location_city
-        imagePath: assets/images/area_city.png
+      - value: 自走式車椅子
+        icon: accessible
+        color: "#1D9E75"
+      - value: 電動車椅子
+        icon: electric_bolt
+        color: "#9C27B0"
+      - value: 介助者
+        icon: people
         color: "#378ADD"
-      - value: 郊外・住宅地
-        icon: house
-        imagePath: assets/images/area_suburb.png
-        color: "#1D9E75"
-      - value: 観光地
-        icon: photo_camera
-        imagePath: assets/images/area_tourism.png
+      - value: 杖利用者
+        icon: elderly
         color: "#EF9F27"
-      - value: 職場・学校
-        icon: business_center
-        imagePath: assets/images/area_work.png
-        color: "#0F6E56"
-
-  # ──────────────────────────────────────────────
-  # 移動の目的（リストレイアウト・複数選択）
-  # ──────────────────────────────────────────────
-  - id: purpose
-    label: 移動の目的
-    question: 移動の主な目的は何ですか？
-    description: 複数選択できます
-    type: multiple
-    layout: list
-    options:
-      - value: 通勤・通学
-        icon: work_outline
-        color: "#1D9E75"
-      - value: 買い物
-        icon: shopping_bag_outlined
+      - value: ベビーカー
+        icon: baby_changing_station
         color: "#D85A30"
-      - value: 観光・レジャー
-        icon: beach_access
-        color: "#EF9F27"
-      - value: 医療・福祉施設
-        icon: local_hospital_outlined
+      - value: 2人乗りベビーカー
+        icon: family_restroom
         color: "#378ADD"
+      - value: 小さいお子さん連れ
+        icon: child_care
+        color: "#EF9F27"
+      - value: シニアカー
+        icon: electric_scooter
+        color: "#6B6B6B"
+      - value: ペット連れ
+        icon: pets
+        color: "#D85A30"
       - value: その他
         icon: more_horiz
         color: "#6B6B6B"
 
-  # ──────────────────────────────────────────────
-  # 外出頻度（リストレイアウト・単一選択）
-  # ──────────────────────────────────────────────
-  - id: frequency
-    label: 外出頻度
-    question: 外出する頻度はどのくらいですか？
+  # ──────────────────────────────────────────────────────────────
+  # Q3: 上半身の可動性（自走式車椅子 / 電動車椅子 を選択した場合のみ）
+  # ──────────────────────────────────────────────────────────────
+  - id: upper_body_full
+    label: 上半身の可動性
+    question: 上半身全体を自由に動かせますか？
     type: single
     layout: list
-    options:
-      - value: 毎日
-        icon: calendar_today
-      - value: 週3〜4回
-        icon: date_range
-      - value: 週1〜2回
-        icon: calendar_view_week
-      - value: 月数回
-        icon: calendar_month
-
-  # ──────────────────────────────────────────────
-  # 欲しい情報（difficulty で「特になし」選択時はスキップ）
-  # ──────────────────────────────────────────────
-  - id: info_need
-    label: 欲しい情報
-    question: どんな情報が役立ちますか？
-    description: 複数選択できます
-    type: multiple
-    layout: list
-    hideIf:
-      questionId: difficulty
+    showIf:
+      questionId: movement_mode
       containsAny:
-        - 特になし
+        - 自走式車椅子
+        - 電動車椅子
     options:
-      - value: バリアフリー経路
-        icon: accessible_forward
+      - value: はい
+        icon: check_circle_outline
         color: "#1D9E75"
-      - value: リアルタイム混雑
-        icon: people_alt_outlined
-        color: "#378ADD"
-      - value: 工事・通行止め
-        icon: warning_amber_outlined
-        color: "#EF9F27"
-      - value: 乗換・時刻表
-        icon: schedule
-        color: "#0F6E56"
-      - value: 周辺グルメ・観光
-        icon: restaurant
+      - value: いいえ
+        icon: close
         color: "#D85A30"
+
+  # ──────────────────────────────────────────────────────────────
+  # 介助者・ベビーカー等 ブランチ（別途準備）
+  # 介助者 / ベビーカー / 2人乗りベビーカー / 小さいお子さん連れ / ペット連れ
+  # ──────────────────────────────────────────────────────────────
+  - id: non_disability_situation
+    label: ご利用の状況
+    question: どのような状況でご利用ですか？
+    description: "※詳細アンケートは準備中です"
+    type: single
+    layout: list
+    showIf:
+      questionId: movement_mode
+      containsAny:
+        - 介助者
+        - ベビーカー
+        - 2人乗りベビーカー
+        - 小さいお子さん連れ
+        - ペット連れ
+    options:
+      - value: ベビーカーを使用している
+        icon: baby_changing_station
+        color: "#378ADD"
+      - value: 介助者と一緒に外出する
+        icon: people
+        color: "#1D9E75"
+      - value: その他
+        icon: more_horiz
+        color: "#6B6B6B"
+
+  # ──────────────────────────────────────────────────────────────
+  # 杖利用者・シニアカー ブランチ（別途準備）
+  # ──────────────────────────────────────────────────────────────
+  - id: ambulatory_situation
+    label: 移動補助の状況
+    question: どのような方法で移動していますか？
+    description: "※詳細アンケートは準備中です"
+    type: single
+    layout: list
+    showIf:
+      questionId: movement_mode
+      containsAny:
+        - 杖利用者
+        - シニアカー
+    options:
+      - value: 杖を使用している
+        icon: elderly
+        color: "#EF9F27"
+      - value: 歩行器を使用している
+        icon: accessible_forward
+        color: "#D85A30"
+      - value: その他
+        icon: more_horiz
+        color: "#6B6B6B"
+
+  # ──────────────────────────────────────────────────────────────
+  # Q4: 上半身の部分的可動性（Q3=いいえ の場合のみ）→ 終端
+  # ──────────────────────────────────────────────────────────────
+  - id: upper_body_partial
+    label: 上半身の動き
+    question: 上半身は部分的に動く場所がありますか？
+    type: single
+    layout: list
+    showIf:
+      questionId: upper_body_full
+      containsAny:
+        - いいえ
+    options:
+      - value: 胴体は動かないが両腕なら自由に動く
+        icon: accessible
+        color: "#1D9E75"
+      - value: 両腕が少しだけ動く
+        icon: accessible
+        color: "#378ADD"
+      - value: 片腕なら動く
+        icon: accessible
+        color: "#EF9F27"
+      - value: いいえ
+        icon: close
+        color: "#6B6B6B"
+
+  # ──────────────────────────────────────────────────────────────
+  # Q3=はい ブランチ: 車椅子スポーツ利用者など（別途準備）
+  # ──────────────────────────────────────────────────────────────
+  - id: limited_upper_body_situation
+    label: 上半身の状況
+    question: 上半身の機能について教えてください
+    description: "※車椅子スポーツ利用者向けの詳細アンケートは準備中です"
+    type: single
+    layout: list
+    showIf:
+      questionId: upper_body_full
+      containsAny:
+        - はい
+    options:
+      - value: 車椅子スポーツを楽しんでいる
+        icon: sports
+        color: "#1D9E75"
+      - value: 電動車椅子を使用している
+        icon: accessible
+        color: "#9C27B0"
+      - value: その他
+        icon: more_horiz
+        color: "#6B6B6B"
