@@ -34,35 +34,42 @@ questions:
     question: 移動のモードを選択してください
     type: single
     layout: grid
-    optionVisualSize: 28
-    optionContainerSize: 52
     options:
       - value: 自走式車椅子
         icon: accessible
+        imagePath: assets/icons/route_category/self_propelled_wheelchair.png
         color: "#1D9E75"
       - value: 電動車椅子
         icon: electric_bolt
+        imagePath: assets/icons/route_category/electric_wheelchair.png
         color: "#9C27B0"
       - value: 介助者
         icon: people
+        imagePath: assets/icons/route_category/caregiver.png
         color: "#378ADD"
       - value: 杖利用者
         icon: elderly
+        imagePath: assets/icons/route_category/elderly_persons.png
         color: "#EF9F27"
       - value: ベビーカー
         icon: baby_changing_station
+        imagePath: assets/icons/route_category/stroller.png
         color: "#D85A30"
       - value: 2人乗りベビーカー
         icon: family_restroom
+        imagePath: assets/icons/route_category/double_stroller.png
         color: "#378ADD"
       - value: 小さいお子さん連れ
         icon: child_care
+        imagePath: assets/icons/route_category/with_young_children.png
         color: "#EF9F27"
       - value: シニアカー
         icon: electric_scooter
+        imagePath: assets/icons/route_category/senior_car.png
         color: "#6B6B6B"
       - value: ペット連れ
         icon: pets
+        imagePath: assets/icons/route_category/bringing_pets.png
         color: "#D85A30"
       - value: その他
         icon: more_horiz

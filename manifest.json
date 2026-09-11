@@ -1,11 +1,11 @@
 {
-    "name": "movemap",
-    "short_name": "movemap",
+    "name": "DiversMap",
+    "short_name": "DiversMap",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "マップベースの移動支援アプリ（表示確認用モック版）",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
